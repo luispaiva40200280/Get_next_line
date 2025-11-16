@@ -1,0 +1,4 @@
+🧠 Resumo em uma frase:
+O stash é a string que mantém guardado tudo aquilo
+que já foi lido do ficheiro, mas ainda não foi devolvido como linha.
+
