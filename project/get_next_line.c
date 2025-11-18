@@ -6,13 +6,13 @@
 /*   By: lpaiva <lpaiva@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 00:15:09 by lpaiva            #+#    #+#             */
-/*   Updated: 2025/11/17 22:58:03 by lpaiva           ###   ########.fr       */
+/*   Updated: 2025/11/18 01:45:58 by lpaiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_new_line(char *s)
+static char	*ft_new_line(char *s)
 {
 	char	*line;
 	int		i;
@@ -24,7 +24,7 @@ char	*ft_new_line(char *s)
 		i++;
 	line = malloc(i + (s[i] == '\n') + 1);
 	if (!line)
-		return (free(line), NULL);
+		return (NULL);
 	i = 0;
 	while (s[i] && s[i] != '\n')
 	{
@@ -37,7 +37,7 @@ char	*ft_new_line(char *s)
 	return (line);
 }
 
-char	*ft_update_buff(char *buff)
+static char	*ft_update_buff(char *buff)
 {
 	char	*new_buff;
 	int		i;
@@ -49,6 +49,8 @@ char	*ft_update_buff(char *buff)
 	while (buff[i] && buff[i] != '\n')
 		i++;
 	if (!buff[i])
+		return (free(buff), NULL);
+	if (!buff[i + 1])
 		return (free(buff), NULL);
 	new_buff = malloc(ft_strlen(buff + i + 1) + 1);
 	if (!new_buff)
@@ -62,19 +64,20 @@ char	*ft_update_buff(char *buff)
 	return (new_buff);
 }
 
-char	*read_file(int fd, char *result)
+static char	*read_file(int fd, char *result)
 {
-	char	*buff;
-	int		bytes;
+	char		*buff;
+	ssize_t		bytes;
 
 	buff = malloc(BUFFER_SIZE + 1);
 	if (!buff)
-		return (free(result), free(buff), NULL);
-	while (!ft_strchr((const char *)result, '\n'))
+		return (free(result), NULL);
+	bytes = 1;
+	while (bytes > 0)
 	{
 		bytes = read(fd, buff, BUFFER_SIZE);
 		if (bytes < 0)
-			return (free(buff), NULL);
+			return (free(buff), free(result), NULL);
 		if (bytes == 0)
 			break ;
 		buff[bytes] = '\0';
@@ -82,15 +85,17 @@ char	*read_file(int fd, char *result)
 		if (!result)
 			return (free(buff), NULL);
 	}
-	return (free(buff), result);
+	free(buff);
+	return (result);
 }
+
 
 char	*get_next_line(int fd)
 {
 	static char	*buffer[MAX_BUFF];
 	char		*line_read;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd >= MAX_BUFF)
 		return (NULL);
 	if (!buffer[fd])
 	{
@@ -103,6 +108,13 @@ char	*get_next_line(int fd)
 	if (!buffer[fd])
 		return (NULL);
 	line_read = ft_new_line(buffer[fd]);
+	if (!line_read)
+	{
+		free(buffer[fd]);
+		buffer[fd] = NULL;
+		return (NULL);
+	}
 	buffer[fd] = ft_update_buff(buffer[fd]);
 	return (line_read);
 }
+ 

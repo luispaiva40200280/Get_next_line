@@ -6,15 +6,15 @@
 /*   By: lpaiva <lpaiva@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 00:15:05 by lpaiva            #+#    #+#             */
-/*   Updated: 2025/11/17 23:27:39 by lpaiva           ###   ########.fr       */
+/*   Updated: 2025/11/18 01:36:53 by lpaiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	ft_strlen(const char *str)
+size_t	ft_strlen(const char *str)
 {
-	int	len;
+	size_t	len;
 
 	if (!str)
 		return (0);
@@ -57,15 +57,22 @@ char	*ft_strchr(const char *s, int c)
 		return ((char *)str);
 	return (NULL);
 }
-
+/*
 char	*ft_strjoin_free(char *s1, const char *s2)
 {
 	size_t	len_s1;
 	size_t	len_s2;
 	char	*new_str;
 
-	if (!s1 || !s2)
+	if (!s2)
 		return (free(s1), NULL);
+	if (!s1)
+	{
+		s1 = malloc(1);
+		if (!s1)
+			return (NULL);
+		s1[0] = '\0';
+	}
 	len_s1 = ft_strlen(s1);
 	len_s2 = ft_strlen(s2);
 	new_str = (char *)malloc(len_s1 + len_s2 + 1);
@@ -75,4 +82,54 @@ char	*ft_strjoin_free(char *s1, const char *s2)
 	ft_memcpy(new_str + len_s1, s2, len_s2);
 	new_str[len_s1 + len_s2] = '\0';
 	return (free(s1), new_str);
+}
+
+*/
+
+char	*ft_strjoin_free(char *s1, const char *s2)
+{
+	size_t	len1;
+	size_t	len2;
+	char	*new;
+
+	/* nenhum dos dois existe */
+	if (!s1 && !s2)
+		return (NULL);
+
+	/* s1 não existe → devolvemos copia de s2 */
+	if (!s1)
+	{
+		len2 = ft_strlen(s2);
+		new = malloc(len2 + 1);
+		if (!new)
+			return (NULL);
+		ft_memcpy(new, s2, len2);
+		new[len2] = '\0';
+		return (new);
+	}
+
+	/* s2 não existe → devolvemos s1 diretamente */
+	if (!s2)
+		return (s1);
+
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+
+	new = malloc(len1 + len2 + 1);
+	if (!new)
+	{
+		free(s1);
+		return (NULL);
+	}
+
+	/* copiar s1 */
+	ft_memcpy(new, s1, len1);
+
+	/* copiar s2 */
+	ft_memcpy(new + len1, s2, len2);
+
+	new[len1 + len2] = '\0';
+
+	free(s1);
+	return (new);
 }

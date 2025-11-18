@@ -6,15 +6,15 @@
 /*   By: lpaiva <lpaiva@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 00:15:05 by lpaiva            #+#    #+#             */
-/*   Updated: 2025/11/17 23:27:11 by lpaiva           ###   ########.fr       */
+/*   Updated: 2025/11/18 00:57:40 by lpaiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-int	ft_strlen(const char *str)
+size_t	ft_strlen(const char *str)
 {
-	int	len;
+	size_t	len;
 
 	if (!str)
 		return (0);
@@ -64,8 +64,15 @@ char	*ft_strjoin_free(char *s1, const char *s2)
 	size_t	len_s2;
 	char	*new_str;
 
-	if (!s1 || !s2)
+	if (!s2)
 		return (free(s1), NULL);
+	if (!s1)
+	{
+		s1 = malloc(1);
+		if (!s1)
+			return (NULL);
+		s1[0] = '\0';
+	}
 	len_s1 = ft_strlen(s1);
 	len_s2 = ft_strlen(s2);
 	new_str = (char *)malloc(len_s1 + len_s2 + 1);
