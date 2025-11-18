@@ -6,7 +6,7 @@
 /*   By: lpaiva <lpaiva@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 00:15:09 by lpaiva            #+#    #+#             */
-/*   Updated: 2025/11/18 01:45:58 by lpaiva           ###   ########.fr       */
+/*   Updated: 2025/11/18 19:16:16 by lpaiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,12 @@ static char	*read_file(int fd, char *result)
 		result = ft_strjoin_free(result, buff);
 		if (!result)
 			return (free(buff), NULL);
+		if (ft_strchr(result, '\n'))
+			break ;
 	}
 	free(buff);
 	return (result);
 }
-
 
 char	*get_next_line(int fd)
 {
@@ -117,4 +118,3 @@ char	*get_next_line(int fd)
 	buffer[fd] = ft_update_buff(buffer[fd]);
 	return (line_read);
 }
- 

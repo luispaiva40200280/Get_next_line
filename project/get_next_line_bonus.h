@@ -6,7 +6,7 @@
 /*   By: lpaiva <lpaiva@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 00:15:14 by lpaiva            #+#    #+#             */
-/*   Updated: 2025/11/18 01:11:41 by lpaiva           ###   ########.fr       */
+/*   Updated: 2025/11/18 18:54:36 by lpaiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 char	*get_next_line(int fd);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strjoin_free(char *s1, const char *s2);
-size_t		ft_strlen(const char *str);
+size_t	ft_strlen(const char *str);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
 
 #endif
